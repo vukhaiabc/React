@@ -1,0 +1,12 @@
+.album-item {
+    cursor: pointer;
+    &__image {
+        width: 190px;
+        border-radius: 10px;
+    }
+    &__title {
+        margin: 6px 0 ;
+        font-weight: 700;
+        text-align: center;
+    }
+}

@@ -1,23 +1,14 @@
 import logo from './logo.svg';
-import './App.css';
+import Todofeature from './feature/Todo/pages';
+import AlbumFeature from './feature/Album/pages';
+
 
 function App() {
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Quang Khải PTIT
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {/* <Todofeature></Todofeature> */}
+      <AlbumFeature></AlbumFeature>
     </div>
   );
 }
