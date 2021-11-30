@@ -27,7 +27,7 @@ function AlbumFeature() {
     return (
         <div className='albums'>
             <h2 className='albums-title'>Album Ca Nhạc Hot Nhất Hiện Nay</h2>
-            <ul className='album-list'>
+            <ul className='album-list'> 
                 {
                     listAlbum.map((item) => {
                         return (
