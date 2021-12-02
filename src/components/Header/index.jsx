@@ -129,7 +129,7 @@ export default function Header() {
         dispatch(action)
     }
     return (
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{ flexGrow: 1 }} >
             <AppBar position="static">
                 <Toolbar>
                     <IconButton
