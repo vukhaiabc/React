@@ -19,6 +19,17 @@ const userApi = {
           };
         return axiosClient.get(url,config);
     },
+    getAddress(){
+        const url = '/address-user'
+        var token = JSON.parse(localStorage.getItem("access_token"))
+        const config = {
+            baseURL:'http://127.0.0.1:8000/api/v1',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          };
+        return axiosClient.get(url,config);
+    },
 };
 
 export default userApi

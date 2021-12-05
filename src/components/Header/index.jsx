@@ -24,7 +24,9 @@ import Register from '../../feature/Auth/components/Register';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { logout } from '../../feature/Auth/userSlice';
-
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import Badge from '@mui/material/Badge';
+import { useHistory } from 'react-router';
 const useStyles = makeStyles({
     root: {
         flexGrow: 1,
@@ -52,6 +54,16 @@ const useStyles = makeStyles({
         right: '0px',
         zIndex: 1,
         fontSize: '30px',
+    },
+    buttonAddToCart: {
+        fontSize: '24px',
+        cursor: 'pointer',
+        '& .MuiBadge-badge': {
+            right: 0,
+            top: 2,
+            border: `2px solid white`,
+            padding: '0 4px',
+        },
     }
 });
 const Search = styled('div')(({ theme }) => ({
@@ -80,7 +92,7 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: 'inherit',
+    color: 'white',
     '& .MuiInputBase-input': {
         padding: theme.spacing(1, 1, 1, 0),
         // vertical padding + font size from searchIcon
@@ -99,14 +111,17 @@ const MODE = {
     LOGIN: 'login',
     REGISTER: 'register'
 }
+
 export default function Header() {
     const classes = useStyles();
     const dispatch = useDispatch()
+    const cart = useSelector((state) => state.cart);
+    const { cartItems, cartTotalAmount, cartTotalQuantity } = cart
     const [mode, setMode] = useState(MODE.LOGIN)
     const [open, setOpen] = useState(false);
     const loggedUser = useSelector((state) => state.user.current)
     const isLoggedIn = !!loggedUser.email
-
+    const history = useHistory()
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const openMenu = Boolean(anchorEl);
@@ -127,6 +142,9 @@ export default function Header() {
         setAnchorEl(null);
         const action = logout()
         dispatch(action)
+    }
+    const handleClickCart = () => {
+        history.push('/cart')
     }
     return (
         <Box sx={{ flexGrow: 1 }} >
@@ -163,7 +181,7 @@ export default function Header() {
                     <NavLink to='/counter' activeClassName='menu-item-active'>
                         <Button color="inherit">Counter</Button>
                     </NavLink>
-                    
+
                     <Search>
                         <SearchIconWrapper>
                             <SearchIcon />
@@ -181,6 +199,13 @@ export default function Header() {
                             <AccountCircleIcon fontSize='large' />
                         </IconButton>
                     )}
+                    <Badge
+                        className={classes.buttonAddToCart}
+                        onClick={handleClickCart}
+                        badgeContent={cartTotalQuantity} color="error"
+                    >
+                        <ShoppingCartOutlinedIcon />
+                    </Badge>
                 </Toolbar>
             </AppBar>
             <Dialog open={open} onClose={handleClose} className={classes.dialog}>

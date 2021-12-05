@@ -46,11 +46,9 @@ const userSlice = createSlice({
       state.current = action.payload
     },
     [loginUser.fulfilled]: (state, action) => {
-      // payload : kết quả trả ra của hàm register(data.user)
       state.current = action.payload
     },
     [currrentUser.fulfilled]: (state, action) => {
-      // payload : kết quả trả ra của hàm register(data.user)
       state.current = action.payload
     },
     // sau khi action đc dispath sẽ cập nhật lại state

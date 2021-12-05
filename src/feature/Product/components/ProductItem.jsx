@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import { Button } from '@mui/material';
 import Rating from '@mui/material/Rating';
 import { makeStyles } from '@mui/styles';
+import { useHistory } from 'react-router';
 
 ProductItem.propTypes = {
     product: PropTypes.object,
@@ -26,7 +27,11 @@ const useStyles = makeStyles({
         },
     },
     title: {
-        flexGrow: 1,
+        height:'50px',
+        overflow:'hidden',
+        display: '-webkit-box',
+        WebkitBoxOrient: 'vertical',
+        WebkitLineClamp: 2,
     },
     favourite: {
         display: 'inline-block',
@@ -59,9 +64,15 @@ const useStyles = makeStyles({
 });
 function ProductItem({ product }) {
     const classes = useStyles()
+    const history = useHistory()
     const image_url = product.image_url !== '' ? product.img_url : '';
+    const handleClick = ()=>{
+        history.push({
+            pathname : `product/${product.id}`
+        })
+    }
     return (
-        <Box className={classes.productitem}>
+        <Box className={classes.productitem} onClick={handleClick}>
             <Box padding={1}>
                 {
                     image_url !== '' ? (
@@ -69,7 +80,7 @@ function ProductItem({ product }) {
                     ) : <Skeleton height='100%' animation="wave" variant="rectangular" />
                 }
             </Box>
-            <Typography fontWeight='700'>{product.name}</Typography>
+            <Typography fontWeight='700'className={classes.title}>{product.name}</Typography>
             <Box sx={{
                 display: 'flex',
                 justifyContent: 'space-between',

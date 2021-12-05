@@ -1,7 +1,6 @@
-import { Checkbox, FormGroup, Typography } from '@mui/material';
+import { Checkbox, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Box } from '@mui/system';
-import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import brandApi from '../../../../api/brandApi';
@@ -25,7 +24,6 @@ const useStyles = makeStyles({
         display: 'flex',
         padding: '0px 6px',
         cursor: 'pointer',
-        display: 'flex',
         alignItems: 'center'
     },
 });
@@ -39,7 +37,7 @@ function FilterByBrand(props) {
         (async () => {
             try {
                 const response = await brandApi.getAll()
-                console.log(response)
+                // console.log(response)
                 setListBrand(response)
             }
             catch (error) {
@@ -60,12 +58,10 @@ function FilterByBrand(props) {
             const index = listCheck.findIndex((item) => item === name)
             newListCheck.splice(index, 1)
         }
-        console.log(newListCheck);
         setListCheck(newListCheck)
 
         if (onChange) {
             const text = newListCheck.toString();
-            console.log(text)
             if (text !== '') {
                 onChange(text)
             }

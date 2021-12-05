@@ -36,13 +36,13 @@ function FilterByPrice(props) {
         <Box>
             <Typography p='16px 0px' fontWeight='bold' >Lọc Theo Giá</Typography>
 
-            <Chip sx = {{margin:'8px'}} label="Dưới 300$"  onClick={()=>{
+            <Chip sx = {{margin:'4px'}} label="Dưới 300$"  onClick={()=>{
                 setValue((prev)=>({
                     salePrice_lte : 300,
                     salePrice_gte :0
                 }))
             }} />
-            <Chip sx = {{margin:'8px'}} label="Từ 300 $ đến 600$" onClick={()=>{
+            <Chip sx = {{margin:'4px'}} label="Từ 300 $ đến 600$" onClick={()=>{
                 setValue((prev)=>({
                     
                     salePrice_gte : 300,
@@ -50,14 +50,14 @@ function FilterByPrice(props) {
                 }))
             }}
             />
-            <Chip sx = {{margin:'8px'}} label="Từ 600 $ đến 1000$" onClick={()=>{
+            <Chip sx = {{margin:'4px'}} label="Từ 600 $ đến 1000$" onClick={()=>{
                 setValue((prev)=>({
                   
                     salePrice_gte : 600,
                     salePrice_lte : 1000,
                 }))
             }}/>
-            <Chip sx = {{margin:'8px'}} label="Trên 1000 $" onClick={()=>{
+            <Chip sx = {{margin:'4px'}} label="Trên 1000 $" onClick={()=>{
                 setValue((prev)=>({
                     salePrice_lte : 1000000,
                     salePrice_gte : 1000,
@@ -65,7 +65,7 @@ function FilterByPrice(props) {
             }}
             />
             
-            <Box pb={2}>
+            <Box pb={2} pt={1}>
                 <Typography fontSize='14px' color ='#888'>Chọn khoảng giá</Typography>
                 <Box display='flex' alignItems='center' marginBottom='16px'>
                    

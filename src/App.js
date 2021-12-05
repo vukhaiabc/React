@@ -1,14 +1,12 @@
-import Todofeature from './feature/Todo/pages';
-import AlbumFeature from './feature/Album/pages';
-import './App.css'
 import { Route, Switch } from 'react-router';
-import { NavLink } from 'react-router-dom';
-import { useEffect } from 'react';
-import coursesApi from './api/coursesApi';
-import CounterTest from './feature/Counter';
+import './App.css';
+import Footer from './components/Footer';
 import Header from './components/Header';
+import AlbumFeature from './feature/Album/pages';
+import CartFeature from './feature/Cart';
+import CounterTest from './feature/Counter';
 import ProductFeature from './feature/Product';
-
+import Todofeature from './feature/Todo/pages';
 
 
 function App() {
@@ -29,9 +27,10 @@ function App() {
         <Route path='/albums' component={AlbumFeature} />
         <Route path='/counter' component= {CounterTest} />
         <Route path='/product' component= {ProductFeature} />
+        <Route path='/cart' component= {CartFeature} />
       </Switch>
 
-      <h1>Footer</h1>
+      <Footer />
     </div>
   );
 }

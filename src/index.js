@@ -7,11 +7,13 @@ import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux';
 import store from './app/store';
 import { SnackbarProvider } from 'notistack';
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
+      <ToastContainer />
         <SnackbarProvider maxSnack={3}>
           <App />
         </SnackbarProvider>
