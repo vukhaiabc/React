@@ -78,7 +78,7 @@ const cartSlice = createSlice({
 
         state.cartItems = nextCartItems;
 
-        toast.error("Product removed from cart", {
+        toast.error("Xoá sản phẩm khỏi giỏ hàng", {
           position: "bottom-left",
         });
       }

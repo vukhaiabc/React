@@ -1,17 +1,12 @@
 import { Close } from '@mui/icons-material';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import { Button } from '@mui/material';
-import AppBar from '@mui/material/AppBar';
+import { Button, Chip, Container, Divider, Grid, TextField } from '@mui/material';
 import Box from '@mui/material/Box';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
-import InputBase from '@mui/material/InputBase';
-import { alpha, styled } from '@mui/material/styles';
-import Toolbar from '@mui/material/Toolbar';
+import SearchIcon from '@mui/icons-material/Search';
 import Typography from '@mui/material/Typography';
 import { makeStyles } from '@mui/styles';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -27,9 +22,13 @@ import { logout } from '../../feature/Auth/userSlice';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import Badge from '@mui/material/Badge';
 import { useHistory } from 'react-router';
+import { getTotals } from '../../feature/Cart/cartSlice';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 const useStyles = makeStyles({
     root: {
-        flexGrow: 1,
+        backgroundColor: 'RGB(26, 148, 255)',
+        padding: '12px 0'
     },
     title: {
         flexGrow: 1,
@@ -64,49 +63,69 @@ const useStyles = makeStyles({
             border: `2px solid white`,
             padding: '0 4px',
         },
+    },
+    search: {
+        height: '38px',
+        backgroundColor: '#fff',
+        display: 'flex',
+        justifyContent: 'space-between',
+        // padding:'6px 10px',
+        borderRadius: '2px',
+    },
+    searchInput: {
+        borderRadius: '2px',
+        padding: '6px 10px',
+        border: 'none',
+        color: '#888',
+        fontSize: '13px',
+        outline: 'none',
+    },
+    searchButton: {
+        display: 'flex',
+        alignItems: 'center',
+        padding: '0px 20px',
+        height: '100%',
+        backgroundColor: 'RGB(13, 92, 182)',
+        color: '#fff',
+        border: 'none',
+        borderRadius: '2px',
+        cursor: 'pointer',
+        fontWeight: '600',
+        '& > span': {
+            fontSize: '13px',
+            fontWeight: 'bold'
+        }
+    },
+    infoUser: {
+        display: 'flex',
+        alignItems: 'center',
+        cursor: 'pointer',
+        '&:hover' : {
+            opacity:'0.9'
+        }
+    },
+    infoDescription: {
+        color: '#fff'
+    },
+    shoppingIcon: {
+        color: '#fff',
+        '&:hover': { opacity: '0.8' },
+    },
+    recommend: {
+        '&>a': {
+            color: '#fff',
+        },
+        '&>a>span': {
+            fontSize: '12px',
+            marginRight: '12px',
+        },
+        '&>a:hover': {
+            opacity: '0.8'
+        }
     }
 });
-const Search = styled('div')(({ theme }) => ({
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
-    '&:hover': {
-        backgroundColor: alpha(theme.palette.common.white, 0.25),
-    },
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-        marginLeft: theme.spacing(1),
-        width: 'auto',
-    },
-}));
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-}));
 
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: 'white',
-    '& .MuiInputBase-input': {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            width: '12ch',
-            '&:focus': {
-                width: '20ch',
-            },
-        },
-    },
-}));
 const MODE = {
     LOGIN: 'login',
     REGISTER: 'register'
@@ -120,9 +139,12 @@ export default function Header() {
     const [mode, setMode] = useState(MODE.LOGIN)
     const [open, setOpen] = useState(false);
     const loggedUser = useSelector((state) => state.user.current)
+    console.log(loggedUser);
     const isLoggedIn = !!loggedUser.email
     const history = useHistory()
-
+    React.useEffect(() => {
+        dispatch(getTotals());
+    }, [dispatch, cart]);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const openMenu = Boolean(anchorEl);
     const handleClickMenu = (event) => {
@@ -148,66 +170,97 @@ export default function Header() {
     }
     return (
         <Box sx={{ flexGrow: 1 }} >
-            <AppBar position="static">
-                <Toolbar>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="open drawer"
-                        sx={{ mr: 2 }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
+            <Box className={classes.root}>
+                <Container>
+                    <Grid container alignItems='center'>
+                        <Grid item md={2} lg={2}>
+                            <Link to='/'> <img width='60px' src="https://salt.tikicdn.com/ts/upload/ae/f5/15/2228f38cf84d1b8451bb49e2c4537081.png" alt="" /></Link>
 
-                    <Typography
-                        variant="h5"
-                        noWrap
-                        component="div"
-                        sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-                    >
-                        <Link className={classes.link} to='/'>Fabbi</Link>
+                        </Grid>
+                        <Grid item md={7} lg={7}>
+                            <Box className={classes.search}>
+                                <input className={classes.searchInput} placeholder='Tìm sản phẩm mong muốn'></input>
+                                <button className={classes.searchButton} >
+                                    <SearchIcon />
+                                    <Typography component='span'>Tìm Kiếm</Typography>
+                                </button>
+                            </Box>
 
-                    </Typography>
-                    <NavLink to='/product' activeClassName='menu-item-active'>
-                        <Button color="inherit">Product</Button>
-                    </NavLink>
-                    <NavLink to='/todos' activeClassName='menu-item-active' >
-                        <Button color="inherit">Todo</Button>
-                    </NavLink>
-                    <NavLink to='/albums' activeClassName='menu-item-active'>
-                        <Button color="inherit">Album</Button>
-                    </NavLink>
-                    <NavLink to='/counter' activeClassName='menu-item-active'>
-                        <Button color="inherit">Counter</Button>
-                    </NavLink>
+                        </Grid>
+                        <Grid item md={1.5} lg={1.5}>
+                            {/* <NavLink to='/product' activeClassName='menu-item-active'>
+                                <Button color="error" variant='contained'>Product</Button>
+                            </NavLink> */}
 
-                    <Search>
-                        <SearchIconWrapper>
-                            <SearchIcon />
-                        </SearchIconWrapper>
-                        <StyledInputBase
-                            placeholder="Tìm kiếm…"
-                            inputProps={{ 'aria-label': 'search' }}
-                        />
-                    </Search>
-                    {!isLoggedIn && (
-                        <Button color="inherit" fontWeight='700' onClick={handleClickOpen}>Đăng Nhập</Button>
-                    )}
-                    {isLoggedIn && (
-                        <IconButton color='inherit' onClick={handleClickMenu}>
-                            <AccountCircleIcon fontSize='large' />
-                        </IconButton>
-                    )}
-                    <Badge
-                        className={classes.buttonAddToCart}
-                        onClick={handleClickCart}
-                        badgeContent={cartTotalQuantity} color="error"
-                    >
-                        <ShoppingCartOutlinedIcon />
-                    </Badge>
-                </Toolbar>
-            </AppBar>
+                            {!isLoggedIn && (
+                                <Button color="inherit" fontWeight='700' onClick={handleClickOpen}>Đăng Nhập</Button>
+                            )}
+                            {isLoggedIn && (
+                                <Box className={classes.infoUser} onClick={handleClickMenu}>
+                                    <IconButton >
+                                        <AccountCircleIcon fontSize='large' sx={{ color: '#fff' }} />
+                                    </IconButton>
+                                    {loggedUser.name}
+                                    <Typography className={classes.infoDescription}>
+                                        <Typography sx={{ fontSize: '12px' }} >
+                                            Tài khoản
+                                        </Typography>
+                                        <Typography display='flex' >
+                                            <Typography>
+                                                {`${loggedUser.first_name} ${loggedUser.last_name}`}
+                                            </Typography>
+                                            <ArrowDropDownIcon />
+                                        </Typography>
+
+
+                                    </Typography>
+                                </Box>
+
+                            )}
+
+                        </Grid>
+                        <Grid item md={1.5} lg={1.5} textAlign='center'>
+                            <Badge
+                                className={classes.buttonAddToCart}
+                                onClick={handleClickCart}
+                                badgeContent={cartTotalQuantity || 0} color="error"
+                            >
+                                <ShoppingCartOutlinedIcon className={classes.shoppingIcon} fontSize="large" />
+                            </Badge>
+                        </Grid>
+                    </Grid>
+                    <Grid container alignItems='center'>
+                        <Grid item md={2} lg={2}>
+                            <Link to='/'> <img width='80px' src="https://salt.tikicdn.com/ts/upload/e5/1d/22/61ff572362f08ead7f34ce410a4a6f96.png" alt="" /></Link>
+                        </Grid>
+                        <Grid item md={7} lg={7} className={classes.recommend}>
+                            <Link to='/product'>
+                                <Typography component='span'>tất cả sản phẩm</Typography>
+                            </Link>
+                            <Link to='/'>
+                                <Typography component='span'>đồ điện tử</Typography>
+                            </Link>
+                            <Link to='/'>
+                                <Typography component='span'>quần áo nam nữ</Typography>
+                            </Link>
+                            <Link to='/'>
+                                <Typography component='span'>đồ gia dụng</Typography>
+                            </Link>
+                            <Link to='/'>
+                                <Typography component='span'>làm đẹp</Typography>
+                            </Link>
+                            <Link to='/'>
+                                <Typography component='span'>gạo</Typography>
+                            </Link>
+                        </Grid>
+                        <Grid item md={3} lg={3} textAlign='right'>
+                            <Chip icon={<HomeOutlinedIcon fontSize='small' />} sx={{ backgroundColor: 'RGB(83, 175, 255)', cursor: 'pointer' }} variant='filled' color='info' label="Bán hàng cùng Fabbi" />
+                        </Grid>
+                    </Grid>
+
+                </Container>
+
+            </Box>
             <Dialog open={open} onClose={handleClose} className={classes.dialog}>
                 <IconButton size="large" className={classes.closeButton} onClick={handleClose} sx={{ color: 'red', position: 'absolute' }}>
                     <Close />
@@ -252,7 +305,8 @@ export default function Header() {
                 }}
             >
                 <MenuItem onClick={handleCloseMenu}>Trang Cá Nhân</MenuItem>
-
+                <MenuItem onClick={handleCloseMenu}>Đơn Mua</MenuItem>
+                <Divider />
                 <MenuItem onClick={handleLogoutClick}>Đăng Xuất</MenuItem>
             </Menu>
         </Box>

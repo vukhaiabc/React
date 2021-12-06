@@ -1,4 +1,4 @@
-import { Container, Grid, Paper } from '@mui/material';
+import { Breadcrumbs, Container, Grid, Link, Paper, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Box } from '@mui/system';
 import React from 'react';
@@ -34,7 +34,17 @@ function ProductDetail(props) {
     }
     return (
         <Box>
+            
             <Container>
+            <Breadcrumbs aria-label="breadcrumb" padding='16px 0'>
+                <Link underline="hover" color="" href="/">
+                    Trang Chủ
+                </Link>
+                <Link underline="hover" color="" href="/product">
+                    Product
+                </Link>
+                <Typography color="text.primary">{product.name}</Typography>
+            </Breadcrumbs>
                 <Paper elevation={0}>
                     <Grid container spacing={0}>
                         <Grid item xs={6} sm={6} md={4} lg={4} className={classes.left}>
@@ -49,7 +59,7 @@ function ProductDetail(props) {
                 </Paper>
                 <Paper elevation={0} sx={{ margin: '30px 0px' }}>
                     <ProductDetailDescription product={product} />
-                    
+
 
                 </Paper>
 

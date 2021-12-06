@@ -29,15 +29,19 @@ const useStyles = makeStyles({
         flex: '1',
     },
     titleProduct: {
-        height: '50px',
-        overflow: 'hidden',
-        display: '-webkit-box',
-        WebkitBoxOrient: 'vertical',
-        WebkitLineClamp: 2,
+        flex: '2',
+        padding: '8px 16px',
         cursor: 'pointer',
-        '&:hover': {
+        '& > a': {
+            color: 'black',
+            overflow: 'hidden',
+            display: '-webkit-box',
+            WebkitBoxOrient: 'vertical',
+            WebkitLineClamp: 2,
+        },
+        '&>a:hover': {
             color: 'RGB(61, 118, 181)'
-        }
+        },
     },
     rootTotal: {
         padding: '16px 16px',
@@ -107,7 +111,11 @@ function CartFeature(props) {
                 <Grid item xs={12} sm={6} md={9} lg={9} display='flex' justifyContent='space-between'>
                     <Typography component='h2' variant='' >Giỏ Hàng</Typography>
                     <Button variant="outlined" color='error' startIcon={<DeleteIcon />}
-                        onClick={handleClearCart}
+                        onClick={() => {
+                            if (window.confirm("Bạn muốn xoá tất cả sản phẩm")) {
+                                handleClearCart()
+                            }
+                        }}
                     >
                         Clear
                     </Button>
@@ -148,10 +156,10 @@ function CartFeature(props) {
 
 
                                             <img src={cartItem.img_url[0]} width='100px' alt={cartItem.name}></img>
-                                            <Box p={2} flex='2'
-                                                className={classes.titleProduct}
+                                            <Box className={classes.titleProduct}>
+                                                <Link to={`/product/${cartItem.id}`} >{cartItem.name}</Link>
+                                            </Box>
 
-                                            >{cartItem.name}</Box>
 
                                         </Grid>
                                         <Grid item md={2} lg={2}>
@@ -186,7 +194,7 @@ function CartFeature(props) {
                                             <DeleteForeverOutlinedIcon
                                                 style={{ fill: 'red', cursor: 'pointer', p: '4px 6px' }}
                                                 onClick={() => {
-                                                    if (window.confirm("Delete the item?")) {
+                                                    if (window.confirm("Bạn muốn xoá sản phẩm khỏi giỏ hàng")) {
                                                         handleRemoveFromCart(cartItem)
                                                     }
                                                 }}
@@ -210,16 +218,16 @@ function CartFeature(props) {
                         <Box padding={1} margin='16px 16px 0 0'>
                             <Box display='flex' justifyContent='space-between' >
                                 <Typography fontWeight='600'>Giao tới</Typography>
-                                <Typography sx={{ fontSize: '14px', color: 'RGB(61, 118, 181)',cursor:'pointer' }}>Thay Đổi</Typography>
+                                <Typography sx={{ fontSize: '14px', color: 'RGB(61, 118, 181)', cursor: 'pointer' }}>Thay Đổi</Typography>
                             </Box>
                             {loading === false && (
                                 <Box >
                                     <Typography component='span'>{address[0].recipient_name}</Typography>
                                     <Typography component='span' p='0px 12px' color='#999'>|</Typography>
                                     <Typography component='span'>{address[0].recipient_phone}</Typography>
-                                    <Box sx={{fontSize:'14px',color:'#777'}}>{address[0].address_detail}</Box>
+                                    <Box sx={{ fontSize: '14px', color: '#777' }}>{address[0].address_detail}</Box>
                                 </Box>
-                                
+
                             )}
                         </Box>
                     </Paper>

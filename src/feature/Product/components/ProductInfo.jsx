@@ -4,9 +4,9 @@ import { Grid, Rating, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Box } from '@mui/system';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { addToCart,addToCartValue } from '../../Cart/cartSlice';
+import { addToCart,addToCartValue, getTotals } from '../../Cart/cartSlice';
 import AddToCart from './AddToCart';
 ProductInfo.propTypes = {
     product: PropTypes.object,
@@ -56,9 +56,11 @@ const useStyles = makeStyles({
 
 function ProductInfo(props) {
     const classes = useStyles()
-    const { product } = props
     const dispatch = useDispatch()
+    const { product } = props
+   
     if(!product) return (<Box>Loading</Box>)
+    
     const handleSubmitAddToCart = (value)=>{
         console.log(value);
         dispatch(addToCartValue({product,value}))

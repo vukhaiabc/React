@@ -10,7 +10,7 @@ import Todofeature from './feature/Todo/pages';
 
 
 function App() {
-  
+
   // useEffect(()=>{
   //   const fetchCourses = async ()=>{
   //     const listCourses = await coursesApi.getAll();
@@ -21,13 +21,12 @@ function App() {
   return (
     <div className="App">
       <Header></Header>
-
       <Switch>
         <Route path='/todos' component={Todofeature} />
         <Route path='/albums' component={AlbumFeature} />
-        <Route path='/counter' component= {CounterTest} />
-        <Route path='/product' component= {ProductFeature} />
-        <Route path='/cart' component= {CartFeature} />
+        <Route path='/counter' component={CounterTest} />
+        <Route path='/product' component={ProductFeature} />
+        <Route path='/cart' component={CartFeature} />
       </Switch>
 
       <Footer />
