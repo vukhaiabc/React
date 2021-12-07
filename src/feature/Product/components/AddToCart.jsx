@@ -66,8 +66,9 @@ function AddToCart(props) {
                                     if (value > 1) setValue(value - 1)
                                 }}
                             />
-                            <TextField className={classes.inputField}
+                            <TextField  className={classes.inputField}
                                 size='small'
+                                InputProps={{ inputProps: { min: 1} }}
                                 value={value}
                                 id="outlined-number"
                                 type="number"

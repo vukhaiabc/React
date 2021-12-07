@@ -23,12 +23,13 @@ function ListPage(props) {
     const queryParam = useMemo(() => {
         return queryString.parse(location.search)
     }, [location.search])
+
     const [productList, setProductList] = useState([])
     const [loading, setLoading] = useState(true)
     const [filters, setFilters] = useState({
         ...queryParam,
         page: Number.parseInt(queryParam.page) || 1,
-        perpage: Number.parseInt(queryParam.perpage) || 10,
+        perpage: Number.parseInt(queryParam.perpage) || 8,
         sortBy: queryParam.sortBy || 'popular',
     })
     const [countProduct, setCountProduct] = useState(0)

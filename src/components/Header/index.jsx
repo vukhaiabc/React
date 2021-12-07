@@ -1,5 +1,5 @@
 import { Close } from '@mui/icons-material';
-import { Button, Chip, Container, Divider, Grid, TextField } from '@mui/material';
+import { Button, Chip, Container, Divider, Grid } from '@mui/material';
 import Box from '@mui/material/Box';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -13,7 +13,8 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import * as React from 'react';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, NavLink } from 'react-router-dom';
+import queryString from 'query-string'
+import { Link } from 'react-router-dom';
 import Login from '../../feature/Auth/components/Login';
 import Register from '../../feature/Auth/components/Register';
 import Menu from '@mui/material/Menu';
@@ -25,6 +26,7 @@ import { useHistory } from 'react-router';
 import { getTotals } from '../../feature/Cart/cartSlice';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import Avatar from '@mui/material/Avatar';
 const useStyles = makeStyles({
     root: {
         backgroundColor: 'RGB(26, 148, 255)',
@@ -32,7 +34,7 @@ const useStyles = makeStyles({
     },
     title: {
         flexGrow: 1,
-    },
+    },    
     link: {
         color: '#fff',
         fontWeight: 'bold',
@@ -79,9 +81,12 @@ const useStyles = makeStyles({
         color: '#888',
         fontSize: '13px',
         outline: 'none',
+        width: '100%'
     },
     searchButton: {
+        width: '180px',
         display: 'flex',
+        textAlign: 'center',
         alignItems: 'center',
         padding: '0px 20px',
         height: '100%',
@@ -100,12 +105,14 @@ const useStyles = makeStyles({
         display: 'flex',
         alignItems: 'center',
         cursor: 'pointer',
-        '&:hover' : {
-            opacity:'0.9'
+        textAlign:'left',
+        '&:hover': {
+            opacity: '0.9'
         }
     },
     infoDescription: {
-        color: '#fff'
+        color: '#fff',
+        fontSize:'14px'
     },
     shoppingIcon: {
         color: '#fff',
@@ -135,11 +142,11 @@ export default function Header() {
     const classes = useStyles();
     const dispatch = useDispatch()
     const cart = useSelector((state) => state.cart);
-    const { cartItems, cartTotalAmount, cartTotalQuantity } = cart
+    const { cartTotalQuantity } = cart
     const [mode, setMode] = useState(MODE.LOGIN)
     const [open, setOpen] = useState(false);
+    const [searchInput, setSearchInput] = useState('')
     const loggedUser = useSelector((state) => state.user.current)
-    console.log(loggedUser);
     const isLoggedIn = !!loggedUser.email
     const history = useHistory()
     React.useEffect(() => {
@@ -147,6 +154,20 @@ export default function Header() {
     }, [dispatch, cart]);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const openMenu = Boolean(anchorEl);
+    const handleOnChangeSearch = (e) => {
+        const valueSearch = e.target.value
+        setSearchInput(valueSearch)
+    }
+    const handleSubmitSearch = () => {
+        const searchObject = {
+            name:searchInput,
+        }
+        
+        history.push({
+            pathname:'/product',
+            search: queryString.stringify(searchObject)
+        })
+    }
     const handleClickMenu = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -179,34 +200,42 @@ export default function Header() {
                         </Grid>
                         <Grid item md={7} lg={7}>
                             <Box className={classes.search}>
-                                <input className={classes.searchInput} placeholder='Tìm sản phẩm mong muốn'></input>
-                                <button className={classes.searchButton} >
+                                <input
+                                    value={searchInput}
+                                    className={classes.searchInput}
+                                    placeholder='Tìm sản phẩm mong muốn'
+                                    onChange={handleOnChangeSearch}
+                                ></input>
+                                <button
+                                    className={classes.searchButton}
+                                    onClick={handleSubmitSearch}
+                                >
                                     <SearchIcon />
                                     <Typography component='span'>Tìm Kiếm</Typography>
                                 </button>
                             </Box>
 
                         </Grid>
-                        <Grid item md={1.5} lg={1.5}>
-                            {/* <NavLink to='/product' activeClassName='menu-item-active'>
-                                <Button color="error" variant='contained'>Product</Button>
-                            </NavLink> */}
+                        <Grid item md={2} lg={2} textAlign='center'>
 
                             {!isLoggedIn && (
-                                <Button color="inherit" fontWeight='700' onClick={handleClickOpen}>Đăng Nhập</Button>
+                                <IconButton margin='auto' onClick={handleClickOpen} >
+                                    <AccountCircleIcon fontSize='large' sx={{ color: '#fff' }} />
+                                </IconButton>
                             )}
                             {isLoggedIn && (
                                 <Box className={classes.infoUser} onClick={handleClickMenu}>
                                     <IconButton >
-                                        <AccountCircleIcon fontSize='large' sx={{ color: '#fff' }} />
+                                    <Avatar alt="Remy Sharp" src={loggedUser.avatar} />
+                                        {/* <AccountCircleIcon fontSize='large' sx={{ color: '#fff' }} /> */}
                                     </IconButton>
                                     {loggedUser.name}
                                     <Typography className={classes.infoDescription}>
-                                        <Typography sx={{ fontSize: '12px' }} >
+                                        <Typography sx={{ fontSize: '12px'}} >
                                             Tài khoản
                                         </Typography>
-                                        <Typography display='flex' >
-                                            <Typography>
+                                        <Typography display='flex'  >
+                                            <Typography sx={{ fontSize: '14px'}} >
                                                 {`${loggedUser.first_name} ${loggedUser.last_name}`}
                                             </Typography>
                                             <ArrowDropDownIcon />
@@ -219,7 +248,7 @@ export default function Header() {
                             )}
 
                         </Grid>
-                        <Grid item md={1.5} lg={1.5} textAlign='center'>
+                        <Grid item md={1} lg={1} textAlign='center'>
                             <Badge
                                 className={classes.buttonAddToCart}
                                 onClick={handleClickCart}

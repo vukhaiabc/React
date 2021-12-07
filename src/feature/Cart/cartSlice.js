@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 
-
 const initialState = {
   cartItems: localStorage.getItem("cartItems")
     ? JSON.parse(localStorage.getItem("cartItems"))
@@ -24,7 +23,7 @@ const cartSlice = createSlice({
           ...state.cartItems[existingIndex],
           cartQuantity: state.cartItems[existingIndex].cartQuantity + action.payload.value,
         };
-        
+
         toast.info("Tăng số sản phẩm ", {
           position: "bottom-left",
         });
@@ -47,7 +46,7 @@ const cartSlice = createSlice({
           ...state.cartItems[existingIndex],
           cartQuantity: state.cartItems[existingIndex].cartQuantity + 1,
         };
-        
+
         toast.info("Tăng số sản phẩm ", {
           position: "bottom-left",
         });
@@ -128,9 +127,10 @@ const cartSlice = createSlice({
       toast.error("Giỏ Hàng Rỗng", { position: "bottom-left" });
     },
   },
+
 });
 
-export const {addToCartValue, addToCart, decreaseCart, removeFromCart, getTotals, clearCart } =
+export const { addToCartValue, addToCart, decreaseCart, removeFromCart, getTotals, clearCart } =
   cartSlice.actions;
 
 export default cartSlice.reducer;

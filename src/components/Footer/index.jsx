@@ -37,10 +37,10 @@ const useStyles = makeStyles({
         }
     },
     footerIcon: {
-        marginBottom: '16px'
+        margin: '16px 0px'
     },
     footerIconItem: {
-        padding: '4px 4px',
+        padding: '0px 4px',
         cursor: 'pointer'
     },
     license: {
@@ -130,7 +130,7 @@ function Footer(props) {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link>
+                                    <Link  to={url}>
                                         <img src="https://hoanghamobile.com/Content/web/img/logo-bct.png" alt="" />
                                     </Link>
                                 </li>

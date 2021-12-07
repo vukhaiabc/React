@@ -1,18 +1,27 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import IconButton from '@mui/material/IconButton';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteForeverOutlinedIcon from '@mui/icons-material/DeleteForeverOutlined';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
-import { Link } from "react-router-dom";
-import { addToCart, clearCart, decreaseCart, getTotals, removeFromCart } from './cartSlice';
-import { Box } from '@mui/system';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import { Alert, Button, Divider, Grid, Paper, Stack, Typography } from '@mui/material';
+import EditLocationOutlinedIcon from '@mui/icons-material/EditLocationOutlined';
+import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
+import { Alert, Button, Divider, FormControl, FormControlLabel, Grid, Paper, Radio, RadioGroup, Stack, Typography } from '@mui/material';
+//dialog:
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
+import IconButton from '@mui/material/IconButton';
 import { makeStyles } from '@mui/styles';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Box } from '@mui/system';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import userApi from '../../api/userApi';
+import { addToCart, clearCart, decreaseCart, getTotals, removeFromCart } from './cartSlice';
+import orderApi from '../../api/orderApi';
+
 CartFeature.propTypes = {
 
 };
@@ -51,22 +60,38 @@ const useStyles = makeStyles({
         display: 'flex',
         justifyContent: 'space-between',
         padding: '4px 0'
-
     },
     labelSubTotal: {
         color: '#5c5c5c'
+    },
+    changeAddress: {
+        color: 'black',
+    },
+    changeAddressItem: {
+        padding: '4px 8px',
+        cursor: 'pointer',
+        borderBottom: '1px solid RGB(245, 245, 245)',
+        '&:hover': {
+            backgroundColor: 'RGB(245, 245, 245)',
+            borderRadius: '3px'
+        }
     }
 })
+const PRICE_SHIP = {
+    deliverynormal : 1.5,
+    deliveryspeed : 3
+}
 function CartFeature(props) {
     const cart = useSelector((state) => state.cart);
     const dispatch = useDispatch();
     const [address, setAddress] = useState([])
     const [loading, setLoading] = useState(true)
+    const [addressIndex, setAddressIndex] = useState(0)
+    const [delivery,setDelivery] = useState('deliverynormal')
     useEffect(() => {
         (async () => {
             try {
                 const response = await userApi.getAddress();
-                console.log(response)
                 setAddress(response)
                 setLoading(false)
             }
@@ -79,10 +104,31 @@ function CartFeature(props) {
     const { cartItems, cartTotalAmount, cartTotalQuantity } = cart
 
     const classes = useStyles()
+    // dialog :
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+
+    //dispatch cart
     useEffect(() => {
         dispatch(getTotals());
     }, [cart, dispatch]);
 
+    const handleChangeAddress = (index) => {
+        setAddressIndex(index)
+        setOpen(false);
+    }
+    const handleChangeDelivery = (e) => {
+        const value = e.target.value
+        setDelivery(value)
+    }
     const handleAddToCart = (product) => {
         dispatch(addToCart(product));
     };
@@ -95,6 +141,31 @@ function CartFeature(props) {
     const handleClearCart = () => {
         dispatch(clearCart());
     };
+
+    const handleClickOrder = ()=>{
+        const cart_items = cartItems.map((item)=>{
+            return {
+                id:item.id,
+                quatity:item.cartQuantity,
+            }
+        })
+        const data = {
+            price_ship : PRICE_SHIP[delivery],
+            receiving_address :address[addressIndex].address_detail,
+            total_price : PRICE_SHIP[delivery] + cartTotalAmount,
+            cart_items,
+        }
+        async function fetchData(data) {
+            try {
+                const response = await orderApi.createOrder(data)
+                console.log(response)
+            }
+            catch (error) {
+                console.log('loi roi', error);
+            }
+        }
+        fetchData(data)
+    }
     return (
         <Box className={classes.root}>
             <Grid container >
@@ -205,9 +276,6 @@ function CartFeature(props) {
                                 )
                             })
                         }
-
-
-
                     </Paper>
 
 
@@ -218,19 +286,50 @@ function CartFeature(props) {
                         <Box padding={1} margin='16px 16px 0 0'>
                             <Box display='flex' justifyContent='space-between' >
                                 <Typography fontWeight='600'>Giao tới</Typography>
-                                <Typography sx={{ fontSize: '14px', color: 'RGB(61, 118, 181)', cursor: 'pointer' }}>Thay Đổi</Typography>
+                                <Box display='flex' alignItems='center'>
+                                    <EditLocationOutlinedIcon />
+                                    <Typography
+                                        sx={{ fontSize: '14px', color: 'RGB(61, 118, 181)', cursor: 'pointer' }}
+                                        onClick={handleClickOpen}
+                                    >Thay Đổi</Typography>
+                                </Box>
+
                             </Box>
-                            {loading === false && (
+                            {loading === false && address.length > 0 && (
                                 <Box >
-                                    <Typography component='span'>{address[0].recipient_name}</Typography>
+                                    <Typography component='span'>{address[addressIndex].recipient_name}</Typography>
                                     <Typography component='span' p='0px 12px' color='#999'>|</Typography>
-                                    <Typography component='span'>{address[0].recipient_phone}</Typography>
-                                    <Box sx={{ fontSize: '14px', color: '#777' }}>{address[0].address_detail}</Box>
+                                    <Typography component='span'>{address[addressIndex].recipient_phone}</Typography>
+                                    <Box sx={{ fontSize: '14px', color: '#777' }}>{address[addressIndex].address_detail}</Box>
                                 </Box>
 
                             )}
                         </Box>
                     </Paper>
+
+                    <Paper elevation={0}>
+                        <Box padding={1} margin='16px 16px 0 0'>
+                            <Box display='flex' justifyContent='space-between' >
+                                <Typography fontWeight='600'>Chọn hình thức giao hàng</Typography>
+
+                                <LocalShippingOutlinedIcon />
+
+                            </Box>
+                            <FormControl component="fieldset">
+                                <RadioGroup
+                                    aria-label="abc"
+                                    defaultValue="deliverynormal"
+                                    name="radio-buttons-group"
+                                    onChange={handleChangeDelivery}
+                                >
+                                    <FormControlLabel value="deliverynormal" control={<Radio />} label="Giao Tiết Kiệm" />
+                                    <FormControlLabel value="deliveryspeed" control={<Radio />} label="Giao Hoả Tốc" />
+                                </RadioGroup>
+                            </FormControl>
+
+                        </Box>
+                    </Paper>
+
                     <Paper elevation={0}>
                         <Box className={classes.rootTotal}>
                             <Box className={classes.subTotal} >
@@ -242,25 +341,63 @@ function CartFeature(props) {
                                 <Typography>{cartTotalAmount}$</Typography>
                             </Box>
                             <Box className={classes.subTotal}>
+                                <Typography className={classes.labelSubTotal}>Phí vận chuyển</Typography>
+                                <Typography>{PRICE_SHIP[delivery]}$</Typography>
+                            </Box>
+                            <Box className={classes.subTotal}>
                                 <Typography className={classes.labelSubTotal}>Giảm Giá</Typography>
                                 <Typography>0</Typography>
                             </Box>
                             <Divider />
                             <Box className={classes.subTotal} margin='16px 0 0 0'>
                                 <Typography className={classes.labelSubTotal}>Tổng cộng</Typography>
-                                <Typography color='red'>{cartTotalAmount}$</Typography>
+                                <Typography color='red'>{cartTotalAmount + PRICE_SHIP[delivery]}$</Typography>
                             </Box>
                         </Box>
 
                     </Paper>
                     <Box marginTop='16px'>
-                        <Button variant='contained' fullWidth >Mua Hàng</Button>
+                        <Button variant='contained' fullWidth onClick={handleClickOrder} >Mua Hàng</Button>
                     </Box>
 
 
                 </Grid>
             </Grid>
-
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-describedby="alert-dialog-slide-description"
+            >
+                <DialogTitle display='flex' alignItems='center'>
+                    <EditLocationOutlinedIcon />
+                    <Typography fontWeight='bold'>
+                        Vui Lòng chọn địa chỉ giao hàng
+                    </Typography>
+                </DialogTitle>
+                <Divider></Divider>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-slide-description">
+                        <Box className={classes.changeAddress}>
+                            {address.map((add, index) => {
+                                return (
+                                    <Box
+                                    key={index}
+                                        className={classes.changeAddressItem}
+                                        onClick={() => handleChangeAddress(index)}>
+                                        <Typography component='span'>{add.recipient_name}</Typography>
+                                        <Typography component='span' p='0px 12px' color='#999'>|</Typography>
+                                        <Typography component='span'>{add.recipient_phone}</Typography>
+                                        <Box sx={{ fontSize: '14px', color: '#777' }}>{add.address_detail}</Box>
+                                    </Box>
+                                )
+                            })}
+                        </Box>
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Đóng</Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     )
 
