@@ -93,7 +93,8 @@ const useStyles = makeStyles({
         backgroundColor: 'RGB(13, 92, 182)',
         color: '#fff',
         border: 'none',
-        borderRadius: '2px',
+        borderTopRightRadius: '2px',
+        borderBottomRightRadius:'2px',
         cursor: 'pointer',
         fontWeight: '600',
         '& > span': {
@@ -188,6 +189,10 @@ export default function Header() {
     }
     const handleClickCart = () => {
         history.push('/cart')
+    }
+    const handleClickOrder = () => {
+        setAnchorEl(null);
+        history.push('/order')
     }
     return (
         <Box sx={{ flexGrow: 1 }} >
@@ -334,7 +339,7 @@ export default function Header() {
                 }}
             >
                 <MenuItem onClick={handleCloseMenu}>Trang Cá Nhân</MenuItem>
-                <MenuItem onClick={handleCloseMenu}>Đơn Mua</MenuItem>
+                <MenuItem onClick={handleClickOrder}>Đơn Mua</MenuItem>
                 <Divider />
                 <MenuItem onClick={handleLogoutClick}>Đăng Xuất</MenuItem>
             </Menu>

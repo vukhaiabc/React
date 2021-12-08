@@ -11,7 +11,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
+import { toast } from "react-toastify";
 import IconButton from '@mui/material/IconButton';
 import { makeStyles } from '@mui/styles';
 import { Box } from '@mui/system';
@@ -78,8 +78,8 @@ const useStyles = makeStyles({
     }
 })
 const PRICE_SHIP = {
-    deliverynormal : 1.5,
-    deliveryspeed : 3
+    deliverynormal: 1.5,
+    deliveryspeed: 3
 }
 function CartFeature(props) {
     const cart = useSelector((state) => state.cart);
@@ -87,7 +87,7 @@ function CartFeature(props) {
     const [address, setAddress] = useState([])
     const [loading, setLoading] = useState(true)
     const [addressIndex, setAddressIndex] = useState(0)
-    const [delivery,setDelivery] = useState('deliverynormal')
+    const [delivery, setDelivery] = useState('deliverynormal')
     useEffect(() => {
         (async () => {
             try {
@@ -142,23 +142,29 @@ function CartFeature(props) {
         dispatch(clearCart());
     };
 
-    const handleClickOrder = ()=>{
-        const cart_items = cartItems.map((item)=>{
+    const handleClickOrder = () => {
+        const cart_items = cartItems.map((item) => {
             return {
-                id:item.id,
-                quatity:item.cartQuantity,
+                id: item.id,
+                quantity: item.cartQuantity,
             }
         })
+        if (cart_items.length <= 0) return;
         const data = {
-            price_ship : PRICE_SHIP[delivery],
-            receiving_address :address[addressIndex].address_detail,
-            total_price : PRICE_SHIP[delivery] + cartTotalAmount,
+            price_ship: PRICE_SHIP[delivery],
+            receiving_address: address[addressIndex].address_detail,
+            total_price: PRICE_SHIP[delivery] + cartTotalAmount,
             cart_items,
         }
         async function fetchData(data) {
             try {
                 const response = await orderApi.createOrder(data)
+
                 console.log(response)
+                toast.info("Tạo đơn hàng thành công, bạn có thể xem tại đơn hàng của mình ", {
+                    position: "top-right",
+                });
+                handleClearCart()
             }
             catch (error) {
                 console.log('loi roi', error);
@@ -381,7 +387,7 @@ function CartFeature(props) {
                             {address.map((add, index) => {
                                 return (
                                     <Box
-                                    key={index}
+                                        key={index}
                                         className={classes.changeAddressItem}
                                         onClick={() => handleChangeAddress(index)}>
                                         <Typography component='span'>{add.recipient_name}</Typography>

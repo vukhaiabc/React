@@ -5,6 +5,7 @@ import Header from './components/Header';
 import AlbumFeature from './feature/Album/pages';
 import CartFeature from './feature/Cart';
 import CounterTest from './feature/Counter';
+import OrderFeature from './feature/Order';
 import ProductFeature from './feature/Product';
 import Todofeature from './feature/Todo/pages';
 
@@ -27,6 +28,7 @@ function App() {
         <Route path='/counter' component={CounterTest} />
         <Route path='/product' component={ProductFeature} />
         <Route path='/cart' component={CartFeature} />
+        <Route path='/order' component={OrderFeature} />
       </Switch>
 
       <Footer />
