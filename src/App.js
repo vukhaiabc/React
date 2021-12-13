@@ -29,6 +29,7 @@ function App() {
         <Route path='/product' component={ProductFeature} />
         <Route path='/cart' component={CartFeature} />
         <Route path='/order' component={OrderFeature} />
+        <Route path='/' component={ProductFeature} />
       </Switch>
 
       <Footer />

@@ -28,12 +28,12 @@ const useStyles = makeStyles({
         padding: '8px 8px',
         cursor: 'pointer',
         '&:hover': {
-            color: 'blue'
+            color: '#e34c4f'
         }
     },
     active: {
-        border: '1px solid red',
-        color: 'red',
+        border: '1px solid #e34c4f',
+        color: '#e34c4f',
     }
 
 })
@@ -57,7 +57,7 @@ function ProductDetailDescription(props) {
                 <li onClick={() => setTab(3)}>
                     <Box
                         className={tab === 3 ? clsx(classes.item, classes.active) : classes.item} 
-                        >Đánh Giá Và Bình Luận</Box>
+                        >Đánh Giá Về Sản Phẩm</Box>
                 </li>
             </Box>
             {tab === 1 && (<ProductDetailInfo product={product} />)}

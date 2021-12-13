@@ -56,7 +56,6 @@ function ProductDetailInfo(props) {
     
     return (
         <Box p={2}>
-            <Typography className={classes.title}>Thông Tin Chi Tiết</Typography>
             {info !== null && (
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 300}} aria-label="simple table">

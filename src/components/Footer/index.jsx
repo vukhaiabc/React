@@ -161,7 +161,7 @@ function Footer(props) {
 
             </Paper>
             <Grid container>
-                <Box className={classes.license}  >@ 2021 - Bản quyền thuộc về Quang Khải PTIT</Box>
+                <Box className={classes.license}  >@ 2021 - Bản quyền thuộc về Fabbi</Box>
             </Grid>
 
         </Box>

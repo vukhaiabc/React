@@ -8,6 +8,7 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { addToCart,addToCartValue, getTotals } from '../../Cart/cartSlice';
 import AddToCart from './AddToCart';
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 ProductInfo.propTypes = {
     product: PropTypes.object,
 };
@@ -73,6 +74,9 @@ function ProductInfo(props) {
             <Box padding='4px 0' color='#999' display='flex' alignItems='center'>
                 <Rating name="read-only" value={product.rating} readOnly />
                 <Typography margin='0 12px'>|</Typography>
+                <RemoveRedEyeOutlinedIcon></RemoveRedEyeOutlinedIcon>
+                <Typography component='span'> Lượt xem : {product.views}</Typography>
+                <Typography margin='0 12px'>|</Typography>
                 <Typography component='span'> Đã bán {product.amount_sold}</Typography>
             </Box>
             <Box className={classes.containerPrice}>
@@ -112,7 +116,7 @@ function ProductInfo(props) {
                         <Box display='flex' color='red' >
                             <ElectricCarOutlinedIcon />
                             <Typography sx={{ m: '0 12px',color:'#888' }} component={'span'}>
-                                Xử lý đơn hàng bởi shopee
+                                Xử lý đơn hàng bởi Fabbi
                             </Typography>
                         </Box>
                         <Box>
