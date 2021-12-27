@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './styles.scss';
 import classnames from 'classnames'
 
 Todolist.propTypes = {
